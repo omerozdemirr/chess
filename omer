@@ -1,0 +1,142 @@
+
+def print_board(board):
+    row_number = 8 
+    print(" ", end="")
+    print("----"*8)
+    for row in board:
+        print(row_number, end=" ")
+        row_number -=1
+        for cell in row:
+            print("| {} ".format(cell), end="")
+        print(" | ")
+        print(" ", end="")
+        print("----"*8)
+    print(" ", end="")
+    for letter in ['a','b','c','d','e','f','g','h']:
+        print("   {}   ".format(letter), end="")
+    print("")
+       
+
+
+board = [["  "]*8]*8
+board[0] = ["BR","BN","BB","BQ","BK","BB","BN","BR"]
+board[1] = ["BP","BP","BP","BP","BP","BP","BP","BP"]
+board[6] = ["BP","BP","BP","BP","BP","BP","BP","BP"]
+board[7] = ["BR","BN","BB","BQ","BK","BB","BN","BR"]
+
+print_board(board)
+EMPTY = "  "
+
+def print_board(board):
+  row_number = 8
+  print("  ", end="")
+  print(" ----"*8)
+  for row in reversed(board):
+      print(row_number, end=" ")
+      row_number -= 1
+      for cell in row:
+          print("| {} ".format(cell), end="")
+      print("|")
+      print("  ", end="")
+      print(" ----"*8)
+  print("  ", end="")
+  for letter in ['a','b','c','d','e','f','g','h']:
+      print("  {}  ".format(letter), end="")
+  print("")
+
+def create_board():
+  board = []
+
+  board.append(["WR","WN","WB","WQ","WK","WB","WN","WR"])
+  board.append(["WP","WP","WP","WP","WP","WP","WP","WP"])
+  for i in range(2, 6):
+    board.append([EMPTY]*8)
+  board.append(["BP","BP","BP","BP","BP","BP","BP","BP"])
+  board.append(["BR","BN","BB","BQ","BK","BB","BN","BR"])
+
+  return board
+
+def find_
+
+
+
+
+(board, piece, target_rank, target_file, source_rank=-1, source_file=-1):
+  # out of bounds
+  if  target_rank < 0 or target_rank > 7:
+    return -1, -1
+  if  target_file < 0 or target_file > 7:
+    return -1, -1
+  # piece with same color is in the target cell
+  if board[target_rank][target_file][0] == piece[0]:
+    return -1, -1
+
+  if piece in ("WR", "BR"):
+    return find_valid_rook_
+    (board, piece, target_rank, target_file, source_rank, source_file)
+
+  return -1, -1
+
+def find_valid_rook_move(board, piece, target_rank, target_file, source_rank=-1, source_file=-1):
+  found_pieces = []
+  for i in range(8):
+    if board[target_rank][i] == piece:
+      found_rank = target_rank
+      found_file = i
+      found_pieces.append((found_rank, found_file))
+
+  for i in range(8):
+    if board[i][target_file] == piece:
+      found_rank = i
+      found_file = target_file
+      found_pieces.append((found_rank, found_file))
+
+  if len(found_pieces) == 0:
+    return -1, -1 
+
+  valid_pieces = []
+
+  for found_rank, found_file in found_pieces:
+    is_valid = True
+    if found_rank == target_rank:
+      start_file = min(target_file+1, found_file+1)
+      end_file = max(target_file, found_file)
+      for i in range(start_file, end_file):
+          if board[target_rank][i] != EMPTY:
+            is_valid = False
+            break
+    else: # found_file == target_file
+      start_rank = min(target_rank+1, found_rank+1)
+      end_rank = max(target_rank, found_rank)
+      for i in range(start_rank, end_rank):
+          if board[i][target_file] != EMPTY:
+            is_valid = False
+            break
+    if is_valid:
+      valid_pieces.append((found_rank, found_file))
+
+  # don't know which item to choose
+  found_rank = -1
+  found_file = -1
+  if len(valid_pieces) > 1:
+    if source_rank < 0 or source_file < 0:
+      return -1, -1
+    for rank, file in valid_pieces:
+      if rank == source_rank and file == source_file:
+        found_rank = rank
+        found_file = file
+  elif len(valid_pieces) == 1:
+    found_rank, found_file = valid_pieces[0]
+
+  return found_rank, found_file
+
+
+def move(board, piece, target_rank, target_file, source_rank=-1, source_file=-1):
+  found_rank, found_file = find_valid_move(board, piece, 
+  target_rank, target_file, source_rank, source_file)
+  if (found_rank, found_file) != (-1, -1):
+    board[target_rank][target_file] = piece
+    board[found_rank][found_file] = EMPTY
+    return True
+  return False
+
